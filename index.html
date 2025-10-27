@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة صيد الألعاب - تعلم التنظيم</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+      body {
+    color: white;
+    min-height: 100vh;
+    padding: 20px;
+    text-align: center;
+    background-image: url('images/room.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .instructions {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+        
+        .game-area {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            /* background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="500" viewBox="0 0 1000 500"><rect width="1000" height="500" fill="%2342a5f5"/><rect x="0" y="350" width="1000" height="150" fill="%2387CEEB"/><rect x="200" y="300" width="600" height="200" fill="%23F5F5DC" rx="20"/><rect x="250" y="250" width="100" height="50" fill="%2390EE90"/><rect x="650" y="250" width="100" height="50" fill="%2390EE90"/><rect x="400" y="200" width="200" height="100" fill="%23FFD700"/></svg>'); */
+            background-size: cover;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+        
+        .toy {
+            position: absolute;
+            cursor: grab;
+            transition: transform 0.2s;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .toy:active {
+            cursor: grabbing;
+        }
+        
+        .toy.dragging {
+            transform: scale(1.1);
+            z-index: 100;
+        }
+        
+        .toy-emoji {
+            font-size: 50px;
+            margin-bottom: 5px;
+        }
+        
+        .toy-shelf {
+            position: absolute;
+            width: 700px;
+            height: 200px;
+            /* bottom: 20px; */
+            right: 50%;
+            transform: translateX(50%);
+            background-color: #8B4513;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 5;
+        }
+        
+        .shelf-compartment {
+            width: 100px;
+            height: 120px;
+            background-color: #A0522D;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .shelf-label {
+            position: absolute;
+            top: -25px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .compartment-placeholder {
+            width: 70px;
+            height: 70px;
+            border: 3px dashed rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            animation: pulse 2s infinite;
+        }
+        
+        .compartment-placeholder.occupied {
+            border: 3px solid rgba(76, 175, 80, 0.7);
+            background-color: rgba(76, 175, 80, 0.2);
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+        }
+        
+        .toys-count {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .progress-bar {
+            flex-grow: 1;
+            height: 20px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            margin: 0 15px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #FF9800, #FF5722);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .celebration-content {
+            background: linear-gradient(135deg, #FF9800, #FF5722);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            animation: pop 0.5s;
+        }
+        
+        @keyframes pop {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .celebration h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .celebration p {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            animation: fall 5s linear infinite;
+        }
+        
+        @keyframes fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+        
+        .hint {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            z-index: 20;
+            animation: bounce 1s infinite alternate;
+        }
+        
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+        
+        @media (max-width: 768px) {
+            .game-area {
+                height: 400px;
+            }
+            
+            .toy-shelf {
+                width: 90%;
+                height: 150px;
+            }
+            
+            .shelf-compartment {
+                width: 70px;
+                height: 90px;
+            }
+            
+            .compartment-placeholder {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .instructions {
+                font-size: 1rem;
+            }
+        }
+        /* --- Responsive Fixes --- */
+
+/* Tablets (max-width: 992px) */
+@media (max-width: 992px) {
+  .container {
+    padding: 10px;
+  }
+
+  .toy-shelf {
+    width: 95%;
+    height: 160px;
+    flex-wrap: wrap;
+  }
+
+  .shelf-compartment {
+    width: 90px;
+    height: 100px;
+    margin: 5px;
+  }
+
+  .toy {
+    transform: scale(0.9);
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  .progress {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .progress-bar {
+    width: 100%;
+  }
+
+  .controls {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}
+
+/* Phones (max-width: 600px) */
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+
+  .container {
+    padding: 5px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  .game-area {
+    height: 320px;
+  }
+
+  .toy-shelf {
+    height: 130px;
+    width: 100%;
+  }
+
+  .shelf-compartment {
+    width: 60px;
+    height: 80px;
+  }
+
+  .compartment-placeholder {
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
+  }
+
+  .toy .toy-emoji {
+    font-size: 38px;
+  }
+
+  .progress {
+    flex-direction: column;
+    padding: 8px 12px;
+  }
+
+  .controls button {
+    padding: 10px 20px;
+    font-size: 1rem;
+  }
+
+  .celebration h2 {
+    font-size: 2rem;
+  }
+
+  .celebration p {
+    font-size: 1.2rem;
+  }
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>لعبة صيد الألعاب</h1>
+            <!-- <div class="instructions">
+                <p>مرحباً! هذه الغرفة مليئة بالفوضى. مهمتك هي تنظيفها عن طريق سحب جميع الألعاب وإسقاطها في الرف المخصص لها.</p>
+                <p>انقر على اللعبة واسحبها إلى المكان المحدد لها في الرف. استمع إلى الأصوات الممتعة عندما تضع اللعبة في مكانها الصحيح!</p>
+            </div> -->
+        </header>
+        
+        <div class="progress">
+            <div class="toys-count">الألعاب المتبقية: <span id="remaining">6</span></div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div class="toys-count">النقاط: <span id="score">0</span></div>
+        </div>
+        
+        <div class="game-area" id="game-area">
+            <!-- سيتم إضافة الألعاب ديناميكياً -->
+            <div class="toy-shelf" id="toy-shelf">
+                <!-- سيتم إضافة أقسام الرف ديناميكياً -->
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="reset-btn">إعادة اللعبة</button>
+            <!-- <button id="sound-btn">تشغيل/إيقاف الصوت</button> -->
+            <button id="hint-btn">إظهار التلميحات</button>
+        </div>
+    </div>
+    
+    <div class="celebration" id="celebration">
+        <div class="celebration-content">
+            <h2>أحسنت! 🎉</h2>
+            <p>لقد نظفت جميع الألعاب بنجاح!</p>
+            <p>الغرفة الآن مرتبة وجميلة.</p>
+            <button id="play-again">العب مرة أخرى</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const gameArea = document.getElementById('game-area');
+            const toyShelf = document.getElementById('toy-shelf');
+            const remainingEl = document.getElementById('remaining');
+            const scoreEl = document.getElementById('score');
+            const progressFill = document.getElementById('progress-fill');
+            const resetBtn = document.getElementById('reset-btn');
+            // const soundBtn = document.getElementById('sound-btn');
+            const hintBtn = document.getElementById('hint-btn');
+            const celebration = document.getElementById('celebration');
+            const playAgainBtn = document.getElementById('play-again');
+            
+            let toys = [];
+            let compartments = [];
+            let hints = [];
+            let score = 0;
+            let totalToys = 6;
+            let remainingToys = totalToys;
+            let soundEnabled = true;
+            let hintsVisible = false;
+            
+            // إنشاء أصوات
+            const dragSound = new Audio('audio/drag.mp3');
+const dropSound = new Audio('audio/wrong.mp3');
+const successSound = new Audio('audio/drop.mp3');
+
+            
+            // إنشاء أقسام الرف
+            function createShelfCompartments() {
+                const compartmentLabels = ['الدمى', 'السيارات', 'الكرة', 'الألعاب', 'المكعبات', 'الروبوت'];
+                const compartmentIcons = ['🧸', '🚗', '🏀', '🎮', '🧩', '🤖'];
+                
+                compartmentLabels.forEach((label, index) => {
+                    const compartment = document.createElement('div');
+                    compartment.className = 'shelf-compartment';
+                    
+                    const placeholder = document.createElement('div');
+                    placeholder.className = 'compartment-placeholder';
+                    // placeholder.innerHTML = compartmentIcons[index];
+                    placeholder.dataset.id = index;
+                    
+                    const shelfLabel = document.createElement('div');
+                    shelfLabel.className = 'shelf-label';
+                    // shelfLabel.textContent = label;
+                    
+                    compartment.appendChild(placeholder);
+                    compartment.appendChild(shelfLabel);
+                    toyShelf.appendChild(compartment);
+                    
+                    compartments.push(placeholder);
+                });
+            }
+            
+            // إنشاء الألعاب
+            function createToys() {
+                const toyTypes = [
+                    { emoji: '🧸', color: '#FF9800' },
+                    { emoji: '🚗', color: '#E91E63' },
+                    { emoji: '🏀', color: '#FF5722' },
+                    { emoji: '🎮', color: '#9C27B0' },
+                    { emoji: '🧩', color: '#4CAF50' },
+                    { emoji: '🤖', color: '#2196F3' }
+                ];
+                
+                toyTypes.forEach((toy, index) => {
+                    const toyElement = document.createElement('div');
+                    toyElement.className = 'toy';
+                    toyElement.innerHTML = `<div class="toy-emoji">${toy.emoji}</div>`;
+                    toyElement.style.left = `${25 + (index % 3) * 20}%`;
+                    toyElement.style.top = `${55 + Math.floor(index / 3) * 20}%`;
+                    toyElement.draggable = true;
+                    toyElement.dataset.id = index;
+                    toyElement.dataset.type = toy.emoji;
+                    
+                    // إضافة مستمعات الأحداث للسحب والإفلات
+                    toyElement.addEventListener('dragstart', handleDragStart);
+                    toyElement.addEventListener('dragend', handleDragEnd);
+                    
+                    gameArea.appendChild(toyElement);
+                    toys.push(toyElement);
+                });
+            }
+            
+            // بدء السحب
+            function handleDragStart(e) {
+                this.classList.add('dragging');
+                e.dataTransfer.setData('text/plain', this.dataset.id);
+                
+                if (soundEnabled) {
+                    dragSound.currentTime = 0;
+                    dragSound.play();
+                }
+            }
+            
+            // انتهاء السحب
+            function handleDragEnd() {
+                this.classList.remove('dragging');
+            }
+            
+            // السماح بالإفلات
+            gameArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+            });
+            
+            // معالجة الإفلات
+            gameArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                const id = e.dataTransfer.getData('text/plain');
+                const draggedToy = document.querySelector(`.toy[data-id="${id}"]`);
+                
+                if (!draggedToy) return;
+                
+                // الحصول على موقع الإفلات
+                const dropX = e.clientX - gameArea.getBoundingClientRect().left;
+                const dropY = e.clientY - gameArea.getBoundingClientRect().top;
+                
+                // البحث عن أقرب قسم في الرف
+                let closestCompartment = null;
+                let minDistance = Infinity;
+                
+                compartments.forEach(compartment => {
+                    if (!compartment.classList.contains('occupied')) {
+                        const rect = compartment.getBoundingClientRect();
+                        const compartmentX = rect.left + rect.width/2 - gameArea.getBoundingClientRect().left;
+                        const compartmentY = rect.top + rect.height/2 - gameArea.getBoundingClientRect().top;
+                        
+                        const distance = Math.sqrt(
+                            Math.pow(dropX - compartmentX, 2) + 
+                            Math.pow(dropY - compartmentY, 2)
+                        );
+                        
+                        if (distance < minDistance && distance < 100) {
+                            minDistance = distance;
+                            closestCompartment = compartment;
+                        }
+                    }
+                });
+                
+                if (closestCompartment) {
+                    // وضع اللعبة في القسم المخصص
+                    const rect = closestCompartment.getBoundingClientRect();
+                    draggedToy.style.left = `${rect.left - gameArea.getBoundingClientRect().left + (rect.width - 60)/2}px`;
+                    draggedToy.style.top = `${rect.top - gameArea.getBoundingClientRect().top + (rect.height - 60)/2}px`;
+                    
+                    // تمييز القسم كمشغول
+                    closestCompartment.classList.add('occupied');
+                    
+                    if (soundEnabled) {
+                        successSound.currentTime = 0;
+                        successSound.play();
+                    }
+                    
+                    // تحديث النقاط والمؤشرات
+                    score += 10;
+                    remainingToys--;
+                    scoreEl.textContent = score;
+                    remainingEl.textContent = remainingToys;
+                    
+                    // تحديث شريط التقدم
+                    const progressPercent = ((totalToys - remainingToys) / totalToys) * 100;
+                    progressFill.style.width = `${progressPercent}%`;
+                    
+                    // إزالة التلميحات إذا كانت مرئية
+                    if (hintsVisible) {
+                        removeHints();
+                    }
+                    
+                    // التحقق من اكتمال اللعبة
+                    if (remainingToys === 0) {
+                        setTimeout(showCelebration, 500);
+                    }
+                } else {
+                    // اللعبة ليست في مكانها الصحيح
+                    if (soundEnabled) {
+                        dropSound.currentTime = 0;
+                        dropSound.play();
+                    }
+                }
+            });
+            
+            // إظهار التلميحات
+            function showHints() {
+                removeHints();
+                
+                toys.forEach(toy => {
+                    if (toy.style.display !== 'none') {
+                        // إنشاء تلميحات توضح الاتجاه للمكان المخصص
+                        const hint = document.createElement('div');
+                        hint.className = 'hint';
+                        hint.innerHTML = '↓';
+                        
+                        const toyRect = toy.getBoundingClientRect();
+                        hint.style.left = `${toyRect.left - gameArea.getBoundingClientRect().left + toyRect.width/2 - 15}px`;
+                        hint.style.top = `${toyRect.top - gameArea.getBoundingClientRect().top - 30}px`;
+                        
+                        gameArea.appendChild(hint);
+                        hints.push(hint);
+                    }
+                });
+                
+                hintsVisible = true;
+                hintBtn.textContent = 'إخفاء التلميحات';
+            }
+            
+            // إخفاء التلميحات
+            function removeHints() {
+                hints.forEach(hint => hint.remove());
+                hints = [];
+                hintsVisible = false;
+                hintBtn.textContent = 'إظهار التلميحات';
+            }
+            
+            // عرض شاشة الاحتفال
+            function showCelebration() {
+    celebration.style.display = 'flex';
+
+    // تشغيل صوت التصفيق
+    if (soundEnabled) {
+        const clapSound = new Audio('audio/clap.mp3');
+        clapSound.play();
+    }
+
+    // إنشاء تأثيرات الترفيه
+    for (let i = 0; i < 100; i++) {
+        createConfetti();
+    }
+}
+
+            
+            // إنشاء قطع الترفيه
+            function createConfetti() {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = `${Math.random() * 100}vw`;
+                confetti.style.animationDelay = `${Math.random() * 5}s`;
+                
+                const colors = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF'];
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                document.body.appendChild(confetti);
+                
+                // إزالة الترفيه بعد انتهاء الرسوم المتحركة
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+            
+            // إعادة تعيين اللعبة
+            function resetGame() {
+                toys.forEach(toy => {
+                    toy.style.display = 'block';
+                     toy.style.left = `${25 + (toy.dataset.id % 3) * 20}%`;
+                    toy.style.top = `${55 + Math.floor(toy.dataset.id / 3) * 20}%`;
+                    
+                });
+                
+                compartments.forEach(compartment => {
+                    compartment.classList.remove('occupied');
+                });
+                
+                score = 0;
+                remainingToys = totalToys;
+                scoreEl.textContent = score;
+                remainingEl.textContent = remainingToys;
+                progressFill.style.width = '0%';
+                celebration.style.display = 'none';
+                
+                // إزالة جميع قطع الترفيه والتلميحات
+                document.querySelectorAll('.confetti').forEach(confetti => confetti.remove());
+                removeHints();
+            }
+            
+            // تبديل الصوت
+            // function toggleSound() {
+            //     soundEnabled = !soundEnabled;
+            //     soundBtn.textContent = soundEnabled ? 'إيقاف الصوت' : 'تشغيل الصوت';
+            // }
+            
+            // تبديل التلميحات
+            function toggleHints() {
+                if (hintsVisible) {
+                    removeHints();
+                } else {
+                    showHints();
+                }
+            }
+            
+            // إضافة مستمعي الأحداث للأزرار
+            resetBtn.addEventListener('click', resetGame);
+            // soundBtn.addEventListener('click', toggleSound);
+            hintBtn.addEventListener('click', toggleHints);
+            playAgainBtn.addEventListener('click', resetGame);
+            
+            // بدء اللعبة
+            createShelfCompartments();
+            createToys();
+        });
+    </script>
+</body>
+</html>
