@@ -12,17 +12,17 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
-      body {
-    color: white;
-    min-height: 100vh;
-    padding: 20px;
-    text-align: center;
-    background-image: url('images/room.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-}
+        body {
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+            text-align: center;
+            background-image: url('images/room3.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
         
         .container {
             max-width: 1000px;
@@ -49,16 +49,99 @@
             line-height: 1.6;
         }
         
+        .start-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        
+        .start-screen.hidden {
+            display: none;
+        }
+        
+        .start-content {
+            background: linear-gradient(135deg, #FF9800, #FF5722);
+            padding: 60px 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            animation: pop 0.5s;
+        }
+        
+        .start-content h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .start-content p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .start-btn {
+            background: white;
+            color: #FF5722;
+            border: none;
+            padding: 20px 50px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .start-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+        
+        .start-btn:active {
+            transform: translateY(0) scale(1);
+        }
+        
         .game-area {
             position: relative;
             width: 100%;
             height: 400px;
-            /* background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="500" viewBox="0 0 1000 500"><rect width="1000" height="500" fill="%2342a5f5"/><rect x="0" y="350" width="1000" height="150" fill="%2387CEEB"/><rect x="200" y="300" width="600" height="200" fill="%23F5F5DC" rx="20"/><rect x="250" y="250" width="100" height="50" fill="%2390EE90"/><rect x="650" y="250" width="100" height="50" fill="%2390EE90"/><rect x="400" y="200" width="200" height="100" fill="%23FFD700"/></svg>'); */
             background-size: cover;
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .toy-shelf {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            background-color: #8B4513;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 5;
+            margin-bottom: 20px;
+        }
+        
+        .floor-area {
+            position: relative;
+            flex-grow: 1;
+            background-color: rgba(139, 69, 19, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
         }
         
         .toy {
@@ -81,25 +164,8 @@
         }
         
         .toy-emoji {
-            font-size: 50px;
+            font-size: 70px;
             margin-bottom: 5px;
-        }
-        
-        .toy-shelf {
-            position: absolute;
-            width: 700px;
-            height: 200px;
-            /* bottom: 20px; */
-            right: 50%;
-            transform: translateX(50%);
-            background-color: #8B4513;
-            border-radius: 10px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            z-index: 5;
         }
         
         .shelf-compartment {
@@ -117,7 +183,7 @@
         
         .shelf-label {
             position: absolute;
-            top: -25px;
+            bottom: -25px;
             font-size: 18px;
             font-weight: bold;
             color: white;
@@ -278,11 +344,10 @@
         
         @media (max-width: 768px) {
             .game-area {
-                height: 400px;
+                height: 500px;
             }
             
             .toy-shelf {
-                width: 90%;
                 height: 150px;
             }
             
@@ -304,117 +369,134 @@
             .instructions {
                 font-size: 1rem;
             }
+            
+            .start-content {
+                padding: 40px 20px;
+            }
+            
+            .start-content h2 {
+                font-size: 2rem;
+            }
+            
+            .start-content p {
+                font-size: 1.1rem;
+            }
+            
+            .start-btn {
+                padding: 15px 40px;
+                font-size: 1.2rem;
+            }
         }
-        /* --- Responsive Fixes --- */
 
-/* Tablets (max-width: 992px) */
-@media (max-width: 992px) {
-  .container {
-    padding: 10px;
-  }
+        @media (max-width: 992px) {
+            .container {
+                padding: 10px;
+            }
 
-  .toy-shelf {
-    width: 95%;
-    height: 160px;
-    flex-wrap: wrap;
-  }
+            .toy-shelf {
+                height: 160px;
+                flex-wrap: wrap;
+            }
 
-  .shelf-compartment {
-    width: 90px;
-    height: 100px;
-    margin: 5px;
-  }
+            .shelf-compartment {
+                width: 90px;
+                height: 100px;
+                margin: 5px;
+            }
 
-  .toy {
-    transform: scale(0.9);
-  }
+            .toy {
+                transform: scale(0.9);
+            }
 
-  h1 {
-    font-size: 2rem;
-  }
+            h1 {
+                font-size: 2rem;
+            }
 
-  .progress {
-    flex-direction: column;
-    gap: 10px;
-  }
+            .progress {
+                flex-direction: column;
+                gap: 10px;
+            }
 
-  .progress-bar {
-    width: 100%;
-  }
+            .progress-bar {
+                width: 100%;
+            }
 
-  .controls {
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-}
+            .controls {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+        }
 
-/* Phones (max-width: 600px) */
-@media (max-width: 600px) {
-  body {
-    padding: 10px;
-  }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
 
-  .container {
-    padding: 5px;
-  }
+            .container {
+                padding: 5px;
+            }
 
-  h1 {
-    font-size: 1.6rem;
-  }
+            h1 {
+                font-size: 1.6rem;
+            }
 
-  .game-area {
-    height: 320px;
-  }
+            .game-area {
+                height: 450px;
+            }
 
-  .toy-shelf {
-    height: 130px;
-    width: 100%;
-  }
+            .toy-shelf {
+                height: 130px;
+            }
 
-  .shelf-compartment {
-    width: 60px;
-    height: 80px;
-  }
+            .shelf-compartment {
+                width: 60px;
+                height: 80px;
+            }
 
-  .compartment-placeholder {
-    width: 45px;
-    height: 45px;
-    font-size: 18px;
-  }
+            .compartment-placeholder {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
 
-  .toy .toy-emoji {
-    font-size: 38px;
-  }
+            .toy .toy-emoji {
+                font-size: 38px;
+            }
 
-  .progress {
-    flex-direction: column;
-    padding: 8px 12px;
-  }
+            .progress {
+                flex-direction: column;
+                padding: 8px 12px;
+            }
 
-  .controls button {
-    padding: 10px 20px;
-    font-size: 1rem;
-  }
+            .controls button {
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
 
-  .celebration h2 {
-    font-size: 2rem;
-  }
+            .celebration h2 {
+                font-size: 2rem;
+            }
 
-  .celebration p {
-    font-size: 1.2rem;
-  }
-}
-
+            .celebration p {
+                font-size: 1.2rem;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Start Screen -->
+    <div class="start-screen" id="start-screen">
+        <div class="start-content">
+            <h2>🎮 لعبة صيد الألعاب 🎮</h2>
+            <p>ساعد في تنظيف الغرفة!</p>
+            <p>اسحب الألعاب من على الأرض وضعها في الرف في الأعلى</p>
+            <button class="start-btn" id="start-game-btn">ابدأ اللعب</button>
+        </div>
+    </div>
+
     <div class="container">
         <header>
             <h1>لعبة صيد الألعاب</h1>
-            <!-- <div class="instructions">
-                <p>مرحباً! هذه الغرفة مليئة بالفوضى. مهمتك هي تنظيفها عن طريق سحب جميع الألعاب وإسقاطها في الرف المخصص لها.</p>
-                <p>انقر على اللعبة واسحبها إلى المكان المحدد لها في الرف. استمع إلى الأصوات الممتعة عندما تضع اللعبة في مكانها الصحيح!</p>
-            </div> -->
         </header>
         
         <div class="progress">
@@ -426,15 +508,12 @@
         </div>
         
         <div class="game-area" id="game-area">
-            <!-- سيتم إضافة الألعاب ديناميكياً -->
-            <div class="toy-shelf" id="toy-shelf">
-                <!-- سيتم إضافة أقسام الرف ديناميكياً -->
-            </div>
+            <div class="toy-shelf" id="toy-shelf"></div>
+            <div class="floor-area" id="floor-area"></div>
         </div>
         
         <div class="controls">
             <button id="reset-btn">إعادة اللعبة</button>
-            <!-- <button id="sound-btn">تشغيل/إيقاف الصوت</button> -->
             <button id="hint-btn">إظهار التلميحات</button>
         </div>
     </div>
@@ -450,13 +529,15 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const startScreen = document.getElementById('start-screen');
+            const startGameBtn = document.getElementById('start-game-btn');
             const gameArea = document.getElementById('game-area');
             const toyShelf = document.getElementById('toy-shelf');
+            const floorArea = document.getElementById('floor-area');
             const remainingEl = document.getElementById('remaining');
             const scoreEl = document.getElementById('score');
             const progressFill = document.getElementById('progress-fill');
             const resetBtn = document.getElementById('reset-btn');
-            // const soundBtn = document.getElementById('sound-btn');
             const hintBtn = document.getElementById('hint-btn');
             const celebration = document.getElementById('celebration');
             const playAgainBtn = document.getElementById('play-again');
@@ -469,14 +550,42 @@
             let remainingToys = totalToys;
             let soundEnabled = true;
             let hintsVisible = false;
-            
-            // إنشاء أصوات
-            const dragSound = new Audio('audio/drag.mp3');
-const dropSound = new Audio('audio/wrong.mp3');
-const successSound = new Audio('audio/drop.mp3');
+            let clapSound = null;
+            let roomSound = null;
+            let gameStarted = false;
 
+            // إعداد الأصوات
+            const dragSound = new Audio('audio/drag.mp3');
+            const dropSound = new Audio('audio/wrong.mp3');
+            const successSound = new Audio('audio/drop.mp3');
             
-            // إنشاء أقسام الرف
+            // تشغيل صوت الغرفة عند بدء اللعبة
+            function playRoomSound() {
+                if (soundEnabled) {
+                    if (roomSound) {
+                        roomSound.pause();
+                        roomSound.currentTime = 0;
+                    }
+                    roomSound = new Audio('audio/room.mp3');
+                    roomSound.loop = false;
+                    roomSound.volume = 0.5;
+                    roomSound.play().catch(err => {
+                        console.log('Audio autoplay prevented:', err);
+                    });
+                }
+            }
+            
+            // بدء اللعبة عند الضغط على زر البدء
+            startGameBtn.addEventListener('click', function() {
+                startScreen.classList.add('hidden');
+                playRoomSound();
+                if (!gameStarted) {
+                    createShelfCompartments();
+                    createToys();
+                    gameStarted = true;
+                }
+            });
+            
             function createShelfCompartments() {
                 const compartmentLabels = ['الدمى', 'السيارات', 'الكرة', 'الألعاب', 'المكعبات', 'الروبوت'];
                 const compartmentIcons = ['🧸', '🚗', '🏀', '🎮', '🧩', '🤖'];
@@ -487,12 +596,10 @@ const successSound = new Audio('audio/drop.mp3');
                     
                     const placeholder = document.createElement('div');
                     placeholder.className = 'compartment-placeholder';
-                    // placeholder.innerHTML = compartmentIcons[index];
                     placeholder.dataset.id = index;
                     
                     const shelfLabel = document.createElement('div');
                     shelfLabel.className = 'shelf-label';
-                    // shelfLabel.textContent = label;
                     
                     compartment.appendChild(placeholder);
                     compartment.appendChild(shelfLabel);
@@ -502,37 +609,43 @@ const successSound = new Audio('audio/drop.mp3');
                 });
             }
             
-            // إنشاء الألعاب
             function createToys() {
                 const toyTypes = [
                     { emoji: '🧸', color: '#FF9800' },
-                    { emoji: '🚗', color: '#E91E63' },
-                    { emoji: '🏀', color: '#FF5722' },
-                    { emoji: '🎮', color: '#9C27B0' },
-                    { emoji: '🧩', color: '#4CAF50' },
-                    { emoji: '🤖', color: '#2196F3' }
+                    { emoji: '⚽', color: '#E91E63' },
+                    { emoji: '🥁', color: '#FF5722' },
+                    { emoji: '🎨', color: '#9C27B0' },
+                    { emoji: '🎲', color: '#4CAF50' },
+                    { emoji: '🎳', color: '#2196F3' }
+                ];
+                
+                const toyPositions = [
+                    { left: '5%', top: '50%' },
+                    { left: '75%', top: '20%' },
+                    { left: '20%', top: '35%' },
+                    { left: '55%', top: '20%' },
+                    { left: '40%', top: '25%' },
+                    { left: '85%', top: '45%' }
                 ];
                 
                 toyTypes.forEach((toy, index) => {
                     const toyElement = document.createElement('div');
                     toyElement.className = 'toy';
                     toyElement.innerHTML = `<div class="toy-emoji">${toy.emoji}</div>`;
-                    toyElement.style.left = `${25 + (index % 3) * 20}%`;
-                    toyElement.style.top = `${55 + Math.floor(index / 3) * 20}%`;
+                    toyElement.style.left = toyPositions[index].left;
+                    toyElement.style.top = toyPositions[index].top;
                     toyElement.draggable = true;
                     toyElement.dataset.id = index;
                     toyElement.dataset.type = toy.emoji;
                     
-                    // إضافة مستمعات الأحداث للسحب والإفلات
                     toyElement.addEventListener('dragstart', handleDragStart);
                     toyElement.addEventListener('dragend', handleDragEnd);
                     
-                    gameArea.appendChild(toyElement);
+                    floorArea.appendChild(toyElement);
                     toys.push(toyElement);
                 });
             }
             
-            // بدء السحب
             function handleDragStart(e) {
                 this.classList.add('dragging');
                 e.dataTransfer.setData('text/plain', this.dataset.id);
@@ -543,17 +656,14 @@ const successSound = new Audio('audio/drop.mp3');
                 }
             }
             
-            // انتهاء السحب
             function handleDragEnd() {
                 this.classList.remove('dragging');
             }
             
-            // السماح بالإفلات
             gameArea.addEventListener('dragover', function(e) {
                 e.preventDefault();
             });
             
-            // معالجة الإفلات
             gameArea.addEventListener('drop', function(e) {
                 e.preventDefault();
                 const id = e.dataTransfer.getData('text/plain');
@@ -561,11 +671,9 @@ const successSound = new Audio('audio/drop.mp3');
                 
                 if (!draggedToy) return;
                 
-                // الحصول على موقع الإفلات
                 const dropX = e.clientX - gameArea.getBoundingClientRect().left;
                 const dropY = e.clientY - gameArea.getBoundingClientRect().top;
                 
-                // البحث عن أقرب قسم في الرف
                 let closestCompartment = null;
                 let minDistance = Infinity;
                 
@@ -588,40 +696,41 @@ const successSound = new Audio('audio/drop.mp3');
                 });
                 
                 if (closestCompartment) {
-                    // وضع اللعبة في القسم المخصص
                     const rect = closestCompartment.getBoundingClientRect();
-                    draggedToy.style.left = `${rect.left - gameArea.getBoundingClientRect().left + (rect.width - 60)/2}px`;
-                    draggedToy.style.top = `${rect.top - gameArea.getBoundingClientRect().top + (rect.height - 60)/2}px`;
-                    
-                    // تمييز القسم كمشغول
+                    const shelfRect = toyShelf.getBoundingClientRect();
+                    const toyRect = draggedToy.getBoundingClientRect();
+
+                    draggedToy.style.position = 'absolute';
+                    draggedToy.style.left = `${rect.left - shelfRect.left + (rect.width - toyRect.width) / 2}px`;
+                    draggedToy.style.top = `${rect.top - shelfRect.top + (rect.height - toyRect.height) / 2}px`;
+                    draggedToy.style.zIndex = 200;
+                    draggedToy.style.cursor = 'default';
+                    draggedToy.draggable = false;
+
+                    toyShelf.appendChild(draggedToy);
                     closestCompartment.classList.add('occupied');
-                    
+
                     if (soundEnabled) {
                         successSound.currentTime = 0;
                         successSound.play();
                     }
-                    
-                    // تحديث النقاط والمؤشرات
+
                     score += 10;
                     remainingToys--;
                     scoreEl.textContent = score;
                     remainingEl.textContent = remainingToys;
-                    
-                    // تحديث شريط التقدم
+
                     const progressPercent = ((totalToys - remainingToys) / totalToys) * 100;
                     progressFill.style.width = `${progressPercent}%`;
-                    
-                    // إزالة التلميحات إذا كانت مرئية
+
                     if (hintsVisible) {
                         removeHints();
                     }
-                    
-                    // التحقق من اكتمال اللعبة
+
                     if (remainingToys === 0) {
                         setTimeout(showCelebration, 500);
                     }
                 } else {
-                    // اللعبة ليست في مكانها الصحيح
                     if (soundEnabled) {
                         dropSound.currentTime = 0;
                         dropSound.play();
@@ -629,16 +738,14 @@ const successSound = new Audio('audio/drop.mp3');
                 }
             });
             
-            // إظهار التلميحات
             function showHints() {
                 removeHints();
                 
                 toys.forEach(toy => {
                     if (toy.style.display !== 'none') {
-                        // إنشاء تلميحات توضح الاتجاه للمكان المخصص
                         const hint = document.createElement('div');
                         hint.className = 'hint';
-                        hint.innerHTML = '↓';
+                        hint.innerHTML = '↑';
                         
                         const toyRect = toy.getBoundingClientRect();
                         hint.style.left = `${toyRect.left - gameArea.getBoundingClientRect().left + toyRect.width/2 - 15}px`;
@@ -653,7 +760,6 @@ const successSound = new Audio('audio/drop.mp3');
                 hintBtn.textContent = 'إخفاء التلميحات';
             }
             
-            // إخفاء التلميحات
             function removeHints() {
                 hints.forEach(hint => hint.remove());
                 hints = [];
@@ -661,24 +767,27 @@ const successSound = new Audio('audio/drop.mp3');
                 hintBtn.textContent = 'إظهار التلميحات';
             }
             
-            // عرض شاشة الاحتفال
             function showCelebration() {
-    celebration.style.display = 'flex';
+                celebration.style.display = 'flex';
 
-    // تشغيل صوت التصفيق
-    if (soundEnabled) {
-        const clapSound = new Audio('audio/clap.mp3');
-        clapSound.play();
-    }
+                if (soundEnabled) {
+                    if (clapSound) {
+                        clapSound.pause();
+                        clapSound.currentTime = 0;
+                    }
+                    if (roomSound) {
+                        roomSound.pause();
+                        roomSound.currentTime = 0;
+                    }
+                    clapSound = new Audio('audio/clap.mp3');
+                    clapSound.play();
+                }
 
-    // إنشاء تأثيرات الترفيه
-    for (let i = 0; i < 100; i++) {
-        createConfetti();
-    }
-}
-
+                for (let i = 0; i < 100; i++) {
+                    createConfetti();
+                }
+            }
             
-            // إنشاء قطع الترفيه
             function createConfetti() {
                 const confetti = document.createElement('div');
                 confetti.className = 'confetti';
@@ -690,44 +799,54 @@ const successSound = new Audio('audio/drop.mp3');
                 
                 document.body.appendChild(confetti);
                 
-                // إزالة الترفيه بعد انتهاء الرسوم المتحركة
                 setTimeout(() => {
                     confetti.remove();
                 }, 5000);
             }
             
-            // إعادة تعيين اللعبة
             function resetGame() {
-                toys.forEach(toy => {
+                const toyPositions = [
+                    { left: '5%', top: '50%' },
+                    { left: '75%', top: '20%' },
+                    { left: '20%', top: '35%' },
+                    { left: '55%', top: '20%' },
+                    { left: '40%', top: '25%' },
+                    { left: '85%', top: '45%' }
+                ];
+
+                toys.forEach((toy, index) => {
+                    floorArea.appendChild(toy);
                     toy.style.display = 'block';
-                     toy.style.left = `${25 + (toy.dataset.id % 3) * 20}%`;
-                    toy.style.top = `${55 + Math.floor(toy.dataset.id / 3) * 20}%`;
-                    
+                    toy.style.position = 'absolute';
+                    toy.style.left = toyPositions[index].left;
+                    toy.style.top = toyPositions[index].top;
+                    toy.style.zIndex = 10;
+                    toy.style.cursor = 'grab';
+                    toy.draggable = true;
                 });
-                
+
                 compartments.forEach(compartment => {
                     compartment.classList.remove('occupied');
                 });
-                
+
                 score = 0;
                 remainingToys = totalToys;
                 scoreEl.textContent = score;
                 remainingEl.textContent = remainingToys;
                 progressFill.style.width = '0%';
                 celebration.style.display = 'none';
-                
-                // إزالة جميع قطع الترفيه والتلميحات
+
                 document.querySelectorAll('.confetti').forEach(confetti => confetti.remove());
                 removeHints();
+
+                if (clapSound) {
+                    clapSound.pause();
+                    clapSound.currentTime = 0;
+                }
+                
+                playRoomSound();
             }
             
-            // تبديل الصوت
-            // function toggleSound() {
-            //     soundEnabled = !soundEnabled;
-            //     soundBtn.textContent = soundEnabled ? 'إيقاف الصوت' : 'تشغيل الصوت';
-            // }
-            
-            // تبديل التلميحات
             function toggleHints() {
                 if (hintsVisible) {
                     removeHints();
@@ -736,15 +855,9 @@ const successSound = new Audio('audio/drop.mp3');
                 }
             }
             
-            // إضافة مستمعي الأحداث للأزرار
             resetBtn.addEventListener('click', resetGame);
-            // soundBtn.addEventListener('click', toggleSound);
             hintBtn.addEventListener('click', toggleHints);
             playAgainBtn.addEventListener('click', resetGame);
-            
-            // بدء اللعبة
-            createShelfCompartments();
-            createToys();
         });
     </script>
 </body>
